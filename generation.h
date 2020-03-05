@@ -6,6 +6,7 @@ typedef enum { DEAD = 0, BORN = 1, ALIVE = 2 } cell_t;
 typedef struct {
 	cell_t** cells;
 	int width, height;
+    int generationNumber;
 } generation_t;
 
 /* Funkcja inicjalizujaca strukture generation_t */

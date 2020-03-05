@@ -11,6 +11,7 @@ generation_t* createNewGeneration(int width, int height) {
 	}
 	newGen->width = width;
 	newGen->height = height;
+    newGen->generationNumber=0;
 }
 
 int getCell(generation_t* gen, int x, int y) {
@@ -53,4 +54,5 @@ void nextGeneration(generation_t* gen) {
 
 		}
 	}
+    gen->generationNumber++;
 }

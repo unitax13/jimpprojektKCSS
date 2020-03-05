@@ -1,2 +1,2 @@
-life: main.o generation.o draw.o
-	$(CC) -o life main.o generation.o draw.o
+life: main.o generation.o draw.o saveimg.o
+	$(CC) -o life main.o generation.o draw.o saveimg.o
