@@ -4,6 +4,6 @@
 #include "generation.h"
 #include "saveimg.h"
 
-int saveimg1(generation_t* gen, char* name, int width, int height);
+int saveimg1(generation_t* gen, char* name);
 
 #endif

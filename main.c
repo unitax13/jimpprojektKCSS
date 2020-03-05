@@ -5,8 +5,8 @@
 #include "draw.h"
 #include "saveimg.h"
 
-
-int main() {
+int main()
+{
 	generation_t* gen = createNewGeneration(10, 10);
 
     system("clear");
@@ -26,7 +26,7 @@ int main() {
     draw(gen);
     sleep(1);
     
-    saveimg1(gen, "losowa_nazwa.pgm", 10, 10);
+    saveimg1(gen, "ostra nazwa");
 	
     return 0;
 }
