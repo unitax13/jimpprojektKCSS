@@ -21,7 +21,7 @@ int getCell(generation_t* gen, int x, int y) {
 
 /* Funkcja pomocnicza zwracajaca ilosc zywych sasiadow,
  * czyli liczaca komorki ALIVE przed komorka
- * i komorki BORN po komorce (bo jeszcze nie zostaly zamienione na ALIVE. */
+ * i komorki BORN po komorce (bo jeszcze nie zostaly zamienione na ALIVE) */
 static int getAliveNeighbours(generation_t* gen, int x, int y) {
 	int neighbours = 0;
 	if (getCell(gen, x - 1, y - 1) == 2) neighbours++;
@@ -39,7 +39,7 @@ void nextGeneration(generation_t* gen) {
 	for (int y = 0; y < gen->height; y++) {
 		for (int x = 0; x < gen->width; x++) {
 			int cell = getCell(gen, x, y);
-			if (cell == EMPTY) {
+			if (cell == DEAD) {
 				if (getAliveNeighbours(gen, x, y) == 3)
 					gen->cells[x][y] = BORN;
 			} else if (cell == BORN || cell == ALIVE) {
