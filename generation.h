@@ -1,7 +1,7 @@
 #ifndef GENERATION_H
 #define GENERATION_H
 
-typedef enum { DEAD = 0, BORN = 1, ALIVE = 2 } cell_t;
+typedef enum { DEAD = 0, DYING, BORN, ALIVE } cell_t;
 
 typedef struct {
 	cell_t** cells;

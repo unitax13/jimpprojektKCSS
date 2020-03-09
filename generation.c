@@ -20,19 +20,22 @@ int getCell(generation_t* gen, int x, int y) {
 	return gen->cells[x][y];
 }
 
-/* Funkcja pomocnicza zwracajaca ilosc zywych sasiadow,
- * czyli liczaca komorki ALIVE przed komorka
- * i komorki BORN po komorce (bo jeszcze nie zostaly zamienione na ALIVE) */
+static int cellIsAlive(generation_t* gen, int x, int y) {
+	int cell = getCell(gen, x, y);
+	return (cell == ALIVE || cell == DYING);
+}
+
+/* Funkcja pomocnicza zwracajaca ilosc zywych sasiadow */
 static int getAliveNeighbours(generation_t* gen, int x, int y) {
 	int neighbours = 0;
-	if (getCell(gen, x - 1, y - 1) == 2) neighbours++;
-	if (getCell(gen, x, y - 1) == 2) neighbours++;
-	if (getCell(gen, x + 1, y - 1) == 2) neighbours++;
-	if (getCell(gen, x - 1, y) == 2) neighbours++;
-	if (getCell(gen, x + 1, y) >= 1) neighbours++;
-	if (getCell(gen, x - 1, y + 1) >= 1) neighbours++;
-	if (getCell(gen, x, y + 1) >= 1) neighbours++;
-	if (getCell(gen, x + 1, y + 1) >= 1) neighbours++;
+	if (cellIsAlive(gen, x - 1, y - 1)) neighbours++;
+	if (cellIsAlive(gen, x, y - 1)) neighbours++;
+	if (cellIsAlive(gen, x + 1, y - 1)) neighbours++;
+	if (cellIsAlive(gen, x - 1, y)) neighbours++;
+	if (cellIsAlive(gen, x + 1, y)) neighbours++;
+	if (cellIsAlive(gen, x - 1, y + 1)) neighbours++;
+	if (cellIsAlive(gen, x, y + 1)) neighbours++;
+	if (cellIsAlive(gen, x + 1, y + 1)) neighbours++;
 	return neighbours;
 }
 
@@ -43,16 +46,21 @@ void nextGeneration(generation_t* gen) {
 			if (cell == DEAD) {
 				if (getAliveNeighbours(gen, x, y) == 3)
 					gen->cells[x][y] = BORN;
-			} else if (cell == BORN || cell == ALIVE) {
+			} else if (cell == ALIVE) {
 				int neighbours = getAliveNeighbours(gen, x, y);
-				if (!(neighbours == 2 || neighbours == 3)) {
-					gen->cells[x][y] = DEAD;
-					break;
-				}
-				gen->cells[x][y] = ALIVE; //ozywianie komorki (zamienianie BORN na ALIVE)
+				if (!(neighbours == 2 || neighbours == 3))
+					gen->cells[x][y] = DYING;
 			}
-
 		}
 	}
-    gen->generationNumber++;
+	for (int y = 0; y < gen->height; y++) {
+		for (int x = 0; x < gen->width; x++) {
+			int cell = getCell(gen, x, y);
+			if (cell == BORN)
+				gen->cells[x][y] = ALIVE;
+			else if (cell == DYING)
+				gen->cells[x][y] = DEAD;
+		}
+	}
+	gen->generationNumber++;
 }
