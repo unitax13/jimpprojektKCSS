@@ -5,6 +5,7 @@
 #include "generation.h" //usun potem
 #include "draw.h"
 #include "saveimg.h"
+#include "readsavefile.h"
 
 #define SZEROKOSC 20
 #define WYSOKOSC 10
@@ -23,6 +24,8 @@ int main() {
 	gen->cells[10][5] = ALIVE;
 	gen->cells[9][6] = ALIVE;
 	gen->cells[10][6] = ALIVE;
+
+    saveToFile(gen, "losowy char");
 
 	while (1) {
 		system("clear");
