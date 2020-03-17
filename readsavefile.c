@@ -1,8 +1,8 @@
 #include "readsavefile.h"
-#include "generation.h"
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 int saveToFile(generation_t* gen, char* name)
 {
@@ -19,7 +19,7 @@ int saveToFile(generation_t* gen, char* name)
     FILE *ouf = fopen ("genstate", "w");                
 
     //zapisywanie, takie jak w pliku draw
-
+	fprintf(ouf, "%i %i\n", gen->width, gen->height);
 	for (int y = 0; y < gen->height; y++) {
 		for (int x = 0; x < gen->width; x++) {
 			if (getCell(gen, x, y) == DEAD)
@@ -30,4 +30,28 @@ int saveToFile(generation_t* gen, char* name)
 		fprintf(ouf, "\n");
 	}
     fclose(ouf);
+}
+
+generation_t* readFromFile(char* filepath) {
+	FILE* f = (strcmp(filepath, "") != 0) ? fopen(filepath, "r") : fopen("genstate", "r");
+	if (f == NULL)
+		return NULL;
+	int width, height;
+	if (fscanf(f, "%i %i", &width, &height) == 0)
+		return NULL;
+	generation_t* gen = createNewGeneration(width, height);
+	char c;
+	for (int y = 0; y < height; y++) {
+		for (int x = 0; x < width; x++) {
+			if (fscanf(f, "%c", &c) == 0)
+				return NULL;
+			if (c == '.')
+				gen->cells[x][y] = DEAD;
+			else if (c == '#')
+				gen->cells[x][y] = ALIVE;
+		}
+		fscanf(f, "%c", &c); //pomijanie znaku nowej linii
+	}
+	fclose(f);
+	return gen;
 }

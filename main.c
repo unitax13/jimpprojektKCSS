@@ -12,6 +12,8 @@
 
 int main() {
 	srand(time(NULL));
+	
+	/*
 	generation_t* gen = createNewGeneration(SZEROKOSC, WYSOKOSC);
 
 	gen->cells[2][0] = ALIVE;
@@ -24,8 +26,11 @@ int main() {
 	gen->cells[10][5] = ALIVE;
 	gen->cells[9][6] = ALIVE;
 	gen->cells[10][6] = ALIVE;
+	
+	saveToFile(gen, "losowy char");
+	*/
 
-    saveToFile(gen, "losowy char");
+	generation_t* gen = readFromFile("");
 
 	while (1) {
 		system("clear");
