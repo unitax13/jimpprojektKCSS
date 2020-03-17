@@ -3,6 +3,7 @@
 
 #include "generation.h"
 
+void drawAuthors();
 void draw(generation_t* gen);
 
 #endif

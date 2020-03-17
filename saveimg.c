@@ -20,12 +20,12 @@ int saveimg1(generation_t* gen, char* name)
     fprintf(ouf, "%d %d\n", gen->width,gen->height); //wymiary obrazka .pgm
     
 
-    for (int x=0; x<gen->width; x++)
+    for (int y=0; y<gen->height; y++)
     {
-        for(int y=0; y<gen->height; y++)
+        for(int x=0; x<gen->width; x++)
         { 
             int temp=0;
-            if ( getCell(gen, y, x) == ALIVE ) temp=1;
+            if ( getCell(gen, x, y) == ALIVE ) temp=1;
             fprintf(ouf, "%d", temp);
         }
     fprintf(ouf, "\n");
