@@ -2,12 +2,40 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <time.h>
+#include <errno.h>
 #include "draw.h"
 #include "readsavefile.h"
 #include "saveimg.h"
 
 #define GENERATION_WIDTH 20
 #define GENERATION_HEIGHT 10
+
+/* Funkcje pomocnicze do sleep() w milisekundach */
+
+int msleep(long msec)
+{
+    struct timespec ts;
+    int res;
+
+    if (msec < 0)
+    {
+        errno = EINVAL;
+        return -1;
+    }
+
+    ts.tv_sec = msec / 1000;
+    ts.tv_nsec = (msec % 1000) * 1000000;
+
+    do {
+        res = nanosleep(&ts, &ts);
+    } while (res && errno == EINTR);
+
+    return res;
+}
+
+
+
 
 /* Funckje pomocnicze do wczytywania gotowych generacji */
 static generation_t* loadGeneration1() {
@@ -101,7 +129,7 @@ int programIteration(generation_t* gen) {
 				if (c == 'y' || c == 'Y') {
 					draw(gen);
 					for (int i = 0; i < n; i++) {
-						sleep(1);
+						msleep(200);
 						nextGeneration(gen);
 						draw(gen);
 					}
