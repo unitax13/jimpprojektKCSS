@@ -11,7 +11,7 @@ generation_t* createNewGeneration(int width, int height) {
 	}
 	newGen->width = width;
 	newGen->height = height;
-	newGen->generationNumber = 0;
+	newGen->generationNumber = 1;
 }
 
 int getCell(generation_t* gen, int x, int y) {
@@ -63,4 +63,14 @@ void nextGeneration(generation_t* gen) {
 		}
 	}
 	gen->generationNumber++;
+}
+
+int isGenerationDead(generation_t* gen) {
+	for (int x = 0; x < gen->width; x++) {
+		for (int y = 0; y < gen->height; y++) {
+			if (gen->cells[x][y] == ALIVE)
+				return 0;
+		}
+	}
+	return 1;
 }

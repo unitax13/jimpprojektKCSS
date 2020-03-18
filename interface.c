@@ -13,30 +13,23 @@
 #define GENERATION_HEIGHT 10
 
 /* Funkcje pomocnicze do sleep() w milisekundach */
-/* (z internetu) */
-int msleep(long msec)
-{
+/* (funkcja wzieta z internetu) */
+int msleep(long msec) {
     struct timespec ts;
     int res;
-
-    if (msec < 0)
-    {
+    
+    if (msec < 0) {
         errno = EINVAL;
         return -1;
     }
-
     ts.tv_sec = msec / 1000;
     ts.tv_nsec = (msec % 1000) * 1000000;
-
     do {
         res = nanosleep(&ts, &ts);
     } while (res && errno == EINTR);
 
     return res;
 }
-
-
-
 
 /* Funckje pomocnicze do wczytywania gotowych generacji */
 static generation_t* loadGeneration1() {
@@ -73,25 +66,24 @@ static char* getStringInput(char* msg) {
 }
 
 generation_t* initGenerationInput() {
-	printf("\n");
-	printf("Wybierz opcje:\n");
-	printf("1. Wczytaj generacje z pliku\n");
-	printf("2. Wczytaj gotowa generacje nr 1\n");
-	printf("3. Wczytaj gotowa generacje nr 2\n");
-	printf("4. Zakoncz\n");
 	char c;
-	do {
+	while (1) {
+		printf("\n");
+		printf("Wybierz opcje:\n");
+		printf("1. Wczytaj generacje z pliku\n");
+		printf("2. Wczytaj gotowa generacje nr 1\n");
+		printf("3. Wczytaj gotowa generacje nr 2\n");
+		printf("4. Zakoncz\n");
 		scanf(" %c", &c);
 		if (c == '1') {
 			char* s = getStringInput("Prosze podac nazwe pliku: ");
 			generation_t* gen = readFromFile(s);
 			if (gen == NULL) {
 				printf("[ERROR] Plik nie istnieje lub nie jest plikiem generacji.\n");
-				continue;
 			} else {
 				printf("Generacja wczytana pomyslnie.\n");
+				return gen;
 			}
-			return gen;
 		} else if (c == '2') {
 			return loadGeneration1();
 		} else if (c == '3') {
@@ -100,9 +92,8 @@ generation_t* initGenerationInput() {
 			return NULL;
 		} else {
 			printf("Prosze podac cyfre od 1 do 4.\n");
-			continue;
 		}
-	} while (0);
+	}
 }
 
 int programIteration(generation_t* gen) {	
@@ -113,19 +104,21 @@ int programIteration(generation_t* gen) {
 	printf("3. Zapisz aktualna generacje do pliku graficznego\n");
 	printf("4. Zakoncz\n");
 	char c;
-	do {
+	while (1) {
 		scanf(" %c", &c);
 		if (c == '1') {
 			printf("Prosze podac liczbe generacji do przeprowadzenia: ");
-			int n = -1;
-			do {
-				if (scanf("%i", &n) == 0 || n < 1) {
+			int n;
+			char* s = malloc(sizeof(char) * 8);
+			while (1) {
+				scanf("%s", s);
+				if (sscanf(s, "%i", &n) == 0 || n < 1)
 					printf("Prosze podac dodatnia liczbe.\n");
-					continue;
-				}
-			} while (0);
+				else
+					break;
+			}
 			printf("Czy przeprowadzic animacje nastepnych generacji (y/n): ");
-			do {
+			while (1) {
 				scanf(" %c", &c);
 				if (c == 'y' || c == 'Y') {
 					draw(gen);
@@ -133,34 +126,43 @@ int programIteration(generation_t* gen) {
 						msleep(SLEEPTIME);
 						nextGeneration(gen);
 						draw(gen);
+						if (isGenerationDead(gen) == 1)
+							break;
 					}
+					break;
 				} else if (c == 'n' || c == 'N') {
-					for (int i = 0; i < n; i++)
+					for (int i = 0; i < n; i++) {
 						nextGeneration(gen);
+						if (isGenerationDead(gen) == 1)
+							break;
+					}
 					draw(gen);
+					break;
 				} else {
 					printf("Prosze podac litere 'y' lub 'n'.\n");
-					continue;
 				}
-			} while (0);
+			}
+			return 0;
 		} else if (c == '2') {	
 			char* s = getStringInput("Prosze podac nazwe, ktora ma miec plik tekstowy: ");
 			if (saveToFile(gen, s) == 1)
 				printf("[ERROR] Wystapil problem przy zapisywaniu obrazka.\n");
 			else
 				printf("Obrazek zapisany pomyslnie.\n");
+			free(s);
+			return 0;
 		} else if (c == '3') {
 			char* s = getStringInput("Prosze podac nazwe, ktora ma miec plik graficzny: ");
 			if (saveimg1(gen, s) == 1)
 				printf("[ERROR] Wystapil problem przy zapisywaniu obrazka.\n");
 			else
 				printf("Obrazek zapisany pomyslnie.\n");
+			free(s);
+			return 0;
 		} else if (c == '4') {
 			return 1;
 		} else {
 			printf("Prosze podac cyfre od 1 do 4.\n");
-			continue;
 		}
-	} while (0);
-	return 0;
+	}
 }

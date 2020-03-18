@@ -19,7 +19,7 @@ int saveToFile(generation_t* gen, char* name)
     FILE *ouf = fopen ("genstate", "w");                
 
     //zapisywanie, takie jak w pliku draw
-	fprintf(ouf, "%i %i\n", gen->width, gen->height);
+	fprintf(ouf, "%i %i %i\n", gen->generationNumber, gen->width, gen->height);
 	for (int y = 0; y < gen->height; y++) {
 		for (int x = 0; x < gen->width; x++) {
 			if (getCell(gen, x, y) == DEAD)
@@ -36,10 +36,11 @@ generation_t* readFromFile(char* filepath) {
 	FILE* f = (strcmp(filepath, "") != 0) ? fopen(filepath, "r") : fopen("genstate", "r");
 	if (f == NULL)
 		return NULL;
-	int width, height;
-	if (fscanf(f, "%i %i", &width, &height) == 0)
+	int number, width, height;
+	if (fscanf(f, "%i %i %i", &number, &width, &height) != 3)
 		return NULL;
 	generation_t* gen = createNewGeneration(width, height);
+	gen->generationNumber = number;
 	char c;
 	for (int y = 0; y < height; y++) {
 		for (int x = 0; x < width; x++) {
