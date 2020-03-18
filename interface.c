@@ -8,11 +8,12 @@
 #include "readsavefile.h"
 #include "saveimg.h"
 
+#define SLEEPTIME 200
 #define GENERATION_WIDTH 20
 #define GENERATION_HEIGHT 10
 
 /* Funkcje pomocnicze do sleep() w milisekundach */
-
+/* (z internetu) */
 int msleep(long msec)
 {
     struct timespec ts;
@@ -129,7 +130,7 @@ int programIteration(generation_t* gen) {
 				if (c == 'y' || c == 'Y') {
 					draw(gen);
 					for (int i = 0; i < n; i++) {
-						msleep(200);
+						msleep(SLEEPTIME);
 						nextGeneration(gen);
 						draw(gen);
 					}
