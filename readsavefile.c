@@ -11,7 +11,7 @@ int saveToFile(generation_t* gen, char* name)
     if (ouf == NULL) return 1;
 
     //zapisywanie, takie jak w pliku draw
-	fprintf(ouf, "%i %i\n", gen->width, gen->height);
+	fprintf(ouf, "%i %i %i\n", gen->generationNumber, gen->width, gen->height);
 	for (int y = 0; y < gen->height; y++) {
 		for (int x = 0; x < gen->width; x++) {
 			if (getCell(gen, x, y) == DEAD)
