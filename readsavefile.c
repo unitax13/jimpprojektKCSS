@@ -8,6 +8,7 @@ int saveToFile(generation_t* gen, char* name)
 {
 
     FILE *ouf = fopen (name, "w");                
+    if (ouf == NULL) return 1;
 
     //zapisywanie, takie jak w pliku draw
 	fprintf(ouf, "%i %i\n", gen->width, gen->height);
@@ -21,6 +22,7 @@ int saveToFile(generation_t* gen, char* name)
 		fprintf(ouf, "\n");
 	}
     fclose(ouf);
+    return 0;
 }
 
 generation_t* readFromFile(char* filepath) {
