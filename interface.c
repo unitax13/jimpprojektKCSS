@@ -126,8 +126,10 @@ int programIteration(generation_t* gen) {
 						msleep(SLEEPTIME);
 						nextGeneration(gen);
 						draw(gen);
-						if (isGenerationDead(gen) == 1)
-							break;
+						if (isGenerationDead(gen) == 1) {
+						    printf("Every cell is dead!\n");	
+                            break;
+                        }
 					}
 					break;
 				} else if (c == 'n' || c == 'N') {
@@ -137,6 +139,8 @@ int programIteration(generation_t* gen) {
 							break;
 					}
 					draw(gen);
+					if (isGenerationDead(gen) == 1)
+					    printf("Every cell is dead!\n");	
 					break;
 				} else {
 					printf("Prosze podac litere 'y' lub 'n'.\n");
