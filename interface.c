@@ -65,6 +65,7 @@ static char* getStringInput(char* msg) {
 	return s;
 }
 
+/* Funkcje interfejsu programu */
 generation_t* initGenerationInput() {
 	char c;
 	while (1) {
@@ -84,6 +85,7 @@ generation_t* initGenerationInput() {
 				printf("Generacja wczytana pomyslnie.\n");
 				return gen;
 			}
+			free(s);
 		} else if (c == '2') {
 			return loadGeneration1();
 		} else if (c == '3') {
@@ -109,7 +111,7 @@ int programIteration(generation_t* gen) {
 		if (c == '1') {
 			printf("Prosze podac liczbe generacji do przeprowadzenia: ");
 			int n;
-			char* s = malloc(sizeof(char) * 8);
+			char s[8];
 			while (1) {
 				scanf("%s", s);
 				if (sscanf(s, "%i", &n) == 0 || n < 1)
@@ -117,42 +119,55 @@ int programIteration(generation_t* gen) {
 				else
 					break;
 			}
+			char a;
 			printf("Czy przeprowadzic animacje nastepnych generacji (y/n): ");
 			while (1) {
-				scanf(" %c", &c);
-				if (c == 'y' || c == 'Y') {
-					draw(gen);
-					for (int i = 0; i < n; i++) {
-						msleep(SLEEPTIME);
-						nextGeneration(gen);
-						draw(gen);
-						if (isGenerationDead(gen) == 1) {
-						    printf("Every cell is dead!\n");	
-                            break;
-                        }
-					}
+				scanf(" %c", &a);
+				if (a == 'y' || a == 'Y' || a == 'n' || a == 'N')
 					break;
-				} else if (c == 'n' || c == 'N') {
-					for (int i = 0; i < n; i++) {
-						nextGeneration(gen);
-						if (isGenerationDead(gen) == 1)
-							break;
-					}
-					draw(gen);
-					if (isGenerationDead(gen) == 1)
-					    printf("Every cell is dead!\n");	
-					break;
-				} else {
+				else
 					printf("Prosze podac litere 'y' lub 'n'.\n");
-				}
 			}
+			char sv;
+			printf("Czy zapisywac kolejne generacji do plikow graficznych? (y/n): ");
+			while (1) {
+				scanf(" %c", &sv);
+				if (sv == 'y' || sv == 'Y' || sv == 'n' || sv == 'N')
+					break;
+				else
+					printf("Prosze podac litere 'y' lub 'n'.\n");
+			}
+			if (sv == 'y' || sv == 'Y') {
+				char is[12];
+				sprintf(is, "%i", gen->generationNumber);
+				saveimg1(gen, is);
+			}
+			system("clear");
+			for (int i = 0; i < n; i++) {
+				if (a == 'y' || a == 'Y') {
+					draw(gen);
+					msleep(SLEEPTIME);
+					system("clear");
+				}
+				nextGeneration(gen);
+				if (sv == 'y' || sv == 'Y') {
+					char is[12];
+					sprintf(is, "%i", gen->generationNumber);
+					saveimg1(gen, is);
+				}
+				if (isGenerationDead(gen) == 1) {
+			    		printf("Wszystkie komorki sa martwe!\n");	
+       		                  	break;
+                       		}
+			}
+			draw(gen);
 			return 0;
-		} else if (c == '2') {	
+		} else if (c == '2') {
 			char* s = getStringInput("Prosze podac nazwe, ktora ma miec plik tekstowy: ");
 			if (saveToFile(gen, s) == 1)
-				printf("[ERROR] Wystapil problem przy zapisywaniu obrazka.\n");
+				printf("[ERROR] Wystapil problem przy zapisywaniu pliku.\n");
 			else
-				printf("Obrazek zapisany pomyslnie.\n");
+				printf("Plik zapisany pomyslnie.\n");
 			free(s);
 			return 0;
 		} else if (c == '3') {

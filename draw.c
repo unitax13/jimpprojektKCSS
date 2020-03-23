@@ -30,8 +30,7 @@ void drawAuthors() {
 }
 
 void draw(generation_t* gen) {
-	system("clear");
-    printf("Generacja #%d\n", gen->generationNumber);   
+    	printf("Generacja #%d\n", gen->generationNumber);   
 	printf("+");
 	for (int x = 0; x < gen->width; x++)
 		printf("-");

@@ -6,11 +6,15 @@
 
 int saveToFile(generation_t* gen, char* name)
 {
+	// modul dodajacy rozszerzenie .txt do nazwy pliku
+	int namelen = 0;
+	while (name[namelen]!='\0') namelen++;
+	char finalname[namelen+4];
+	for (int i=0; i<namelen; i++) finalname[i]=name[i];
+	sprintf(finalname + namelen, ".txt");
 
-    FILE *ouf = fopen (name, "w");                
-    if (ouf == NULL) return 1;
-
-    //zapisywanie, takie jak w pliku draw
+	FILE *ouf = (strcmp(name, "") != 0) ? fopen(finalname, "w") : fopen("genstate.txt", "w");
+    	if (ouf == NULL) return 1;
 	fprintf(ouf, "%i %i %i\n", gen->generationNumber, gen->width, gen->height);
 	for (int y = 0; y < gen->height; y++) {
 		for (int x = 0; x < gen->width; x++) {
@@ -21,12 +25,12 @@ int saveToFile(generation_t* gen, char* name)
 		}
 		fprintf(ouf, "\n");
 	}
-    fclose(ouf);
-    return 0;
+    	fclose(ouf);
+    	return 0;
 }
 
 generation_t* readFromFile(char* filepath) {
-	FILE* f = (strcmp(filepath, "") != 0) ? fopen(filepath, "r") : fopen("genstate", "r");
+	FILE* f = (strcmp(filepath, "") != 0) ? fopen(filepath, "r") : fopen("genstate.txt", "r");
 	if (f == NULL)
 		return NULL;
 	int number, width, height;

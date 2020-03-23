@@ -1,8 +1,12 @@
 #ifndef GENERATION_H
 #define GENERATION_H
 
+/* Typ pola w strukturze generacji
+ * (wartosci DYING i BORN pomagaja przy
+ * tworzeniu nastepnej generacji) */
 typedef enum { DEAD = 0, DYING, BORN, ALIVE } cell_t;
 
+/* Struktura generacji */
 typedef struct {
 	cell_t** cells;
 	int width, height;
