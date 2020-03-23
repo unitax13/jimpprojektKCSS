@@ -24,6 +24,12 @@ void drawAuthors() {
 	for (int i = 0; i < AUTHORS_WIDTH - strlen(s3) - 3; i++)
 		printf(" ");
 	printf("|\n");
+	char* s4 = "Karol Cieślik, 307333";
+	printf("| %s", s4);
+	for (int i = 0; i < AUTHORS_WIDTH - strlen(s4) - 2; i++)
+		printf(" ");
+	printf("|\n");
+
 	for (int i = 0; i < AUTHORS_WIDTH; i++)
 		printf( (i % 4 == 0) ? "+" : "-" );
 	printf("\n");
