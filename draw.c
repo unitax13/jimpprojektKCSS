@@ -14,11 +14,6 @@ void drawAuthors() {
 	for (int i = 0; i < AUTHORS_WIDTH - strlen(s1) - 3; i++)
 		printf(" ");
 	printf("|\n");
-	char* s2 = "IMIE NAZWISKO, NR_INDEKSU";
-	printf("| %s", s2);
-	for (int i = 0; i < AUTHORS_WIDTH - strlen(s2) - 3; i++)
-		printf(" ");
-	printf("|\n");
 	char* s3 = "Szymon Szafranski, 307405";
 	printf("| %s", s3);
 	for (int i = 0; i < AUTHORS_WIDTH - strlen(s3) - 3; i++)
